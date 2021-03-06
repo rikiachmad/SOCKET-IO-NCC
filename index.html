@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Socket.IO chat</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        margin: 20px auto;
+        font-family: "Lato";
+        font-weight: 300;
+      }
+
+      form {
+        padding: 15px 25px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      form label {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      input {
+        font-family: "Lato";
+      }
+
+      a {
+        color: #0000ff;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      #wrapper,
+      #loginform {
+        position: absolute;
+        padding-bottom: 25px;
+        background: #eee;
+        width: 400px;
+        max-width: 100%;
+        border: 2px solid #212121;
+        border-radius: 4px;
+        left: 1500px;
+        top: 140px;
+      }
+
+      #loginform {
+        padding-top: 18px;
+        text-align: center;
+      }
+
+      #loginform p {
+        padding: 15px 25px;
+        font-size: 1.4rem;
+        font-weight: bold;
+      }
+
+      #chatbox {
+        text-align: left;
+        margin: 0 auto;
+        margin-bottom: 25px;
+        padding: 10px;
+        background: #fff;
+        height: 500px;
+        width: 350px;
+        border: 2px solid #a7a7a7;
+        overflow: auto;
+        border-radius: 4px;
+        border-bottom: 4px solid #a7a7a7;
+      }
+      #messages {
+        height: 300px;
+        width: 350px;
+      }
+
+      #input {
+        flex: 1;
+        border-radius: 4px;
+        border: 1px solid #ff9800;
+      }
+
+      #name {
+        border-radius: 4px;
+        border: 1px solid #ff9800;
+        padding: 2px 8px;
+      }
+
+      #button {
+        background: #ff9800;
+        border: 2px solid #e65100;
+        color: white;
+        padding: 4px 10px;
+        font-weight: bold;
+        border-radius: 4px;
+      }
+
+      .error {
+        color: #ff0000;
+      }
+
+      #menu {
+        padding: 15px 25px;
+        display: flex;
+      }
+
+      #menu p.welcome {
+        flex: 1;
+      }
+      #myCanvas {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+      }
+      #board {
+        border: solid black;
+        height: 800px;
+        width: 1200px;
+        margin-left: 250px;
+      }
+    </style>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="board">
+      <canvas class="whiteboard" id="myCanvas"> </canvas>
+    </div>
+    <div id="wrapper">
+      <div id="menu">
+        <p id="welcome">Welcome, <b></b></p>
+      </div>
+      <div id="chatbox">
+        <ul id="messages"></ul>
+      </div>
+      <form id="form" action="">
+        <input id="input" autocomplete="off" />
+        <button id="button">Send</button>
+      </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      src = "/drawing.js";
+    </script>
+    <script>
+      let userName = prompt("whats your name");
+      // let room = prompt("room name");
+      let ID = "";
+      var welcome = document.getElementById("welcome");
+      welcome.append(userName + "!");
+      var socket = io();
+      // socket.emit("join room", { username: userName, roomName: room });
+      var messages = document.getElementById("messages");
+      var form = document.getElementById("form");
+      var input = document.getElementById("input");
+      var chatbox = document.getElementById("chatbox");
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit("chat message", {
+            value: input.value,
+            user: userName,
+            // room: room,
+          });
+          input.value = "";
+          input.focus();
+        }
+      });
+
+      socket.on("chat message", function (msg) {
+        console.log(msg);
+        var item = document.createElement("li");
+        item.textContent = msg.msg.user + " : " + msg.msg.value;
+        messages.appendChild(item);
+        chatbox.scrollTo(0, document.body.scrollHeight);
+      });
+      (function () {
+        var canvas = document.getElementsByClassName("whiteboard")[0];
+        var context = canvas.getContext("2d");
+
+        var current = {
+          color: "black",
+        };
+        var drawing = false;
+
+        canvas.addEventListener("mousedown", onMouseDown, false);
+        canvas.addEventListener("mouseup", onMouseUp, false);
+        canvas.addEventListener("mouseout", onMouseUp, false);
+        canvas.addEventListener("mousemove", throttle(onMouseMove, 10), false);
+
+        socket.on("drawing", onDrawingEvent);
+
+        window.addEventListener("resize", onResize, false);
+        onResize();
+
+        function drawLine(x0, y0, x1, y1, color, emit) {
+          context.beginPath();
+          context.moveTo(x0, y0);
+          context.lineTo(x1, y1);
+          context.strokeStyle = color;
+          context.lineWidth = 2;
+          context.stroke();
+          context.closePath();
+
+          if (!emit) {
+            return;
+          }
+          var w = canvas.width;
+          var h = canvas.height;
+
+          socket.emit("drawing", {
+            x0: x0 / w,
+            y0: y0 / h,
+            x1: x1 / w,
+            y1: y1 / h,
+            color: color,
+          });
+        }
+
+        function onMouseDown(e) {
+          drawing = true;
+          current.x = e.clientX;
+          current.y = e.clientY;
+        }
+
+        function onMouseUp(e) {
+          if (!drawing) {
+            return;
+          }
+          drawing = false;
+          drawLine(
+            current.x,
+            current.y,
+            e.clientX,
+            e.clientY,
+            current.color,
+            true
+          );
+        }
+
+        function onMouseMove(e) {
+          if (!drawing) {
+            return;
+          }
+          drawLine(
+            current.x,
+            current.y,
+            e.clientX,
+            e.clientY,
+            current.color,
+            true
+          );
+          current.x = e.clientX;
+          current.y = e.clientY;
+        }
+
+        // function onColorUpdate(e) {
+        //   current.color = e.target.className.split(" ")[1];
+        // }
+
+        // limit the number of events per second
+        function throttle(callback, delay) {
+          var previousCall = new Date().getTime();
+          return function () {
+            var time = new Date().getTime();
+
+            if (time - previousCall >= delay) {
+              previousCall = time;
+              callback.apply(null, arguments);
+            }
+          };
+        }
+
+        function onDrawingEvent(data) {
+          var w = canvas.width;
+          var h = canvas.height;
+          drawLine(
+            data.x0 * w,
+            data.y0 * h,
+            data.x1 * w,
+            data.y1 * h,
+            data.color
+          );
+        }
+
+        // make the canvas fill its parent
+        function onResize() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        function getRandomColor() {
+          var letters = "0123456789ABCDEF";
+          var color = "#";
+          for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
+        }
+      })();
+    </script>
+  </body>
+</html>

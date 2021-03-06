@@ -1,10 +1,10 @@
 let users = [];
 
-function joinUser(socketId, userName, roomName) {
+function joinUser(socketId, userName, color) {
   const user = {
     socketID: socketId,
     username: userName,
-    roomname: roomName,
+    color:color
   };
   users.push(user);
   return user;
@@ -22,4 +22,23 @@ function findUser(id) {
     user.id === id;
   });
 }
-module.exports = { joinUser, removeUser };
+function getRandomColor() {
+  var letters = "123456789ABCDEF";
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+function getRandomColor() {
+  var letters = "123456789ABCDEF";
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+// function countUsers(){
+//   return users.length;
+// }
+module.exports = { joinUser, removeUser, getRandomColor };

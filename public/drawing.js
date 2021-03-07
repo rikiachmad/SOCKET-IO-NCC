@@ -1,5 +1,5 @@
 (function () {
-  var socket = io();
+  const socket = io("/collab");
   var canvas = document.getElementsByClassName("whiteboard")[0];
   var context = canvas.getContext("2d");
   var current = {

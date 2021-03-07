@@ -22,4 +22,5 @@ function findUser(id) {
     user.id === id;
   });
 }
+
 module.exports = { joinUser, removeUser };

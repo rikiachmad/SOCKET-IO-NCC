@@ -44,7 +44,7 @@
     max-width: 100%;
     border: 2px solid #212121;
     border-radius: 4px;
-    left: 1500px;
+    left: 1515px;
     top: 140px;
   }
 
@@ -116,4 +116,13 @@
     right: 0;
     bottom: 0;
     top: 0;
+  }
+  #iframe {
+    width:1350px;
+    margin-left : 150px;
+    height:800px;
+    border: solid black;
+  }
+  #btn-createroom {
+    margin-left: 150px  ;
   }

@@ -1,156 +1,243 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>Welcome Page</title>
 
-<head>
-  <meta charset="utf-8" />
-  <link rel="stylesheet" type="text/css" href="styles.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <title>Welcome Page</title>
+    <style></style>
+  </head>
 
-  <style></style>
-</head>
+  <body>
+    <form id="forms" action="">
+      <div class="modal fade" data-backdrop="static" id="ModalUsername">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Please Enter Your Username</h4>
+            </div>
+            <div class="modal-body">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter Username"
+                id="usr"
+                value=""
+                autofocus
+                required
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                onclick="getUsername()"
+                id="usrname"
+                type="button"
+                class="btn btn-primary"
+                data-dismiss="modal"
+                disabled
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
 
-<body>
-  <form>
-    <div class="modal fade" data-backdrop="static" id="ModalUsername">
+    <div id="wrapper">
+      <div id="menu">
+        <p id="welcome">Welcome, <b></b></p>
+      </div>
+      <div id="chatbox">
+        <ul id="messages"></ul>
+      </div>
+      <form id="form" action="">
+        <input id="input" autocomplete="off" />
+        <button id="button">Send</button>
+      </form>
+    </div>
+    <iframe
+      id="iframe"
+      src="/index.html"
+      scrolling="no"
+      class="iframe-class"
+      frameborder="1"
+    ></iframe>
+    <div>
+      <button
+        type="button"
+        class="btn btn-primary btn-lg"
+        data-toggle="modal"
+        data-target="#ModalCreate"
+        id="btn-createroom"
+      >
+        Create New Room
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary btn-lg"
+        data-toggle="modal"
+        data-target="#ModalJoin"
+        id="btn-joinroom"
+      >
+        Join Room
+      </button>
+    </div>
+    <div class="modal fade" id="ModalCreate">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Please Enter Your Username</h4>
+            <h4 class="modal-title font-weight-bold">Create New Room</h4>
           </div>
           <div class="modal-body">
-            <input type="text" class="form-control" placeholder="Enter Username" id="usr" required />
+            <div class="custom-control custom-radio form-group">
+              <input
+                type="radio"
+                id="col-room"
+                name="customRadio"
+                class="custom-control-input"
+                value="collaborative"
+                checked
+              />
+              <label class="custom-control-label" for="col-room"
+                >Collaborative Room</label
+              >
+            </div>
+            <div class="custom-control custom-radio form-group">
+              <input
+                type="radio"
+                id="broad-room"
+                name="customRadio"
+                class="custom-control-input"
+                value="broadcast"
+              />
+              <label class="custom-control-label" for="broad-room"
+                >Broadcast Room</label
+              >
+            </div>
+            <div class="form-group">
+              <label for="croom">Room Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter Room Name"
+                id="croom"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="cpwd">Password:</label>
+              <input
+                type="password"
+                class="form-control"
+                placeholder="Enter Password"
+                id="cpwd"
+              />
+            </div>
           </div>
           <div class="modal-footer">
-            <button onclick="getUsername()" id="usrname" type="button" class="btn btn-primary" data-dismiss="modal" disabled>
+            <form id="createRoom" action="">
+              <button onclick="createClick()"
+                type="button"
+                class="btn btn-primary"
+                data-dismiss="modal"
+                id="cbutton"
+                disabled
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="ModalJoin">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title font-weight-bold">Join Room</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="jroom">Room Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter Room Name"
+                id="jroom"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="jpwd">Password:</label>
+              <input
+                type="password"
+                class="form-control"
+                placeholder="Enter Password"
+                id="jpwd"
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button onclick="joinClick()"
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              id="jbutton"
+              disabled
+            >
               Submit
             </button>
           </div>
         </div>
       </div>
     </div>
-  </form>
 
-  <div id="wrapper">
-    <div id="menu">
-      <p id="welcome">Welcome, <b></b></p>
-    </div>
-    <div id="chatbox">
-      <ul id="messages"></ul>
-    </div>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" />
-      <button id="button">Send</button>
-    </form>
-  </div>
-  <iframe id="iframe" src="/index.html" scrolling="no" class="iframe-class" frameborder="1"></iframe>
-  <div>
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#ModalCreate" id="btn-createroom">
-      Create New Room
-    </button>
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#ModalJoin" id="btn-joinroom">
-      Join Room
-    </button>
-  </div>
-
-  <div class="modal fade" id="ModalCreate">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title font-weight-bold">Create New Room</h4>
-        </div>
-        <div class="modal-body">
-          <div class="custom-control custom-radio form-group">
-            <input type="radio" id="col-room" name="customRadio" class="custom-control-input" checked>
-            <label class="custom-control-label" for="col-room">Collaborative Room</label>
-          </div>
-          <div class="custom-control custom-radio form-group">
-            <input type="radio" id="broad-room" name="customRadio" class="custom-control-input">
-            <label class="custom-control-label" for="broad-room">Broadcast Room</label>
-          </div>
-          <div class="form-group">
-            <label for="croom">Room Name:</label>
-            <input type="text" class="form-control" placeholder="Enter Room Name" id="croom" required />
-          </div>
-          <div class="form-group">
-            <label for="cpwd">Password:</label>
-            <input type="password" class="form-control" placeholder="Enter Password" id="cpwd" />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal" id="cbutton" disabled>
-            Submit
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>S
-
-  <div class="modal fade" id="ModalJoin">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title font-weight-bold">Join Room</h4>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="jroom">Room Name:</label>
-            <input type="text" class="form-control" placeholder="Enter Room Name" id="jroom" required />
-          </div>
-          <div class="form-group">
-            <label for="jpwd">Password:</label>
-            <input type="password" class="form-control" placeholder="Enter Password" id="jpwd" />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal" id="jbutton" disabled>
-            Submit
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/chat.js"></script>
-  <script src="/users.js"></script>
-  <script>
-    $(window).on("load", function() {
-      $("#ModalUsername").modal("show");
-    });
-
-    $(document).ready(function() {
-      $('#usr').on('input change', function() {
-        if ($(this).val() != '') {
-          $('#usrname').prop('disabled', false);
-        } else {
-          $('#usrname').prop('disabled', true);
-        }
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/chat.js"></script>
+    <script src="/users.js"></script>
+    <script src="/rooms.js"></script>
+    <script>
+      $(window).on("load", function () {
+        $("#ModalUsername").modal("show");
       });
-    });
-    $(document).ready(function() {
-      $('#croom').on('input change', function() {
-        if ($(this).val() != '') {
-          $('#cbutton').prop('disabled', false);
-        } else {
-          $('#cbutton').prop('disabled', true);
-        }
-      });
-    });
-    $(document).ready(function() {
-      $('#jroom').on('input change', function() {
-        if ($(this).val() != '') {
-          $('#jbutton').prop('disabled', false);
-        } else {
-          $('#jbutton').prop('disabled', true);
-        }
-      });
-    });
-  </script>
-</body>
 
+      $(document).ready(function () {
+        $("#usr").on("input change", function () {
+          if ($(this).val() != "") {
+            $("#usrname").prop("disabled", false);
+          } else {
+            $("#usrname").prop("disabled", true);
+          }
+        });
+      });
+      $(document).ready(function () {
+        $("#croom").on("input change", function () {
+          if ($(this).val() != "") {
+            $("#cbutton").prop("disabled", false);
+          } else {
+            $("#cbutton").prop("disabled", true);
+          }
+        });
+      });
+      $(document).ready(function () {
+        $("#jroom").on("input change", function () {
+          if ($(this).val() != "") {
+            $("#jbutton").prop("disabled", false);
+          } else {
+            $("#jbutton").prop("disabled", true);
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

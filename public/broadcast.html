@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <title>Broadcast</title>
+  </head>
+  <body>
+    <div id="board">
+      <canvas class="whiteboard" id="myCanvas"> </canvas>
+    </div>
+    <div id="wrapper">
+      <div id="menu">
+        <p id="welcome">Welcome, <b></b></p>
+      </div>
+      <div id="chatbox">
+        <ul id="messages"></ul>
+      </div>
+      <form id="form" action="">
+        <input id="input" autocomplete="off" />
+        <button id="button">Send</button>
+      </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+  </body>
+</html>

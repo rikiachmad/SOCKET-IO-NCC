@@ -4,7 +4,7 @@ function joinUser(socketId, userName, color) {
   const user = {
     socketID: socketId,
     username: userName,
-    color:color
+    color: color,
   };
   users.push(user);
   return user;
@@ -22,15 +22,4 @@ function findUser(id) {
     user.id === id;
   });
 }
-function getRandomColor() {
-  var letters = "123456789ABCDEF";
-  var color = "#";
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
-// function countUsers(){
-//   return users.length;
-// }
-module.exports = { joinUser, removeUser};
+module.exports = { joinUser, removeUser };

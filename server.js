@@ -3,7 +3,7 @@ const app = express();
 const server = require("http").createServer(app);
 const port = process.env.PORT || 3000;
 const io = require("socket.io")(server);
-const { joinUser, removeUser } = require("./users");
+const { joinUser, removeUser } = require("./public/users");
 
 app.use(express.static(__dirname + "/public"));
 server.listen(3000, () => {

@@ -59,7 +59,7 @@
     font-weight: bold;
   }
 
-  #chatbox {
+  #chatbox, #collabChatbox {
     text-align: left;
     margin: 0 auto;
     margin-bottom: 25px;
@@ -72,12 +72,12 @@
     border-radius: 4px;
     border-bottom: 4px solid #a7a7a7;
   }
-  #messages {
+  #messages, #collabMessages {
     height: 300px;
     width: 350px;
   }
 
-  #input {
+  #input, #collabInput {
     flex: 1;
     border-radius: 4px;
     border: 1px solid #ff9800;
@@ -89,7 +89,7 @@
     padding: 2px 8px;
   }
 
-  #button {
+  #button, #collabButton {
     background: #ff9800;
     border: 2px solid #e65100;
     color: white;

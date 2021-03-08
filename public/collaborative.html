@@ -11,16 +11,18 @@
     </div>
     <div id="wrapper">
       <div id="menu">
-        <p id="welcome">Welcome, <b></b></p>
+        <p id="collabWelcome">Welcome, <b></b></p>
       </div>
-      <div id="chatbox">
-        <ul id="messages"></ul>
+      <div id="collabChatbox">
+        <ul id="collabMessages"></ul>
       </div>
-      <form id="form" action="">
-        <input id="input" autocomplete="off" />
-        <button id="button">Send</button>
+      <form id="collabForm" action="">
+        <input id="collabInput" autocomplete="off" />
+        <button id="collabButton">Send</button>
       </form>
     </div>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/collabchat.js"></script>
+    <script src="/rooms.js"></script>
   </body>
 </html>

@@ -1,6 +1,3 @@
-
-
-
 var nameRoom = document.getElementById("croom");
 var passRoom = document.getElementById("cpwd");
 var radios = document.getElementsByName("customRadio");
@@ -23,28 +20,25 @@ function createClick() {
     roompass: passRoom.value,
     roomtype: checkRadio(),
   });
-  
 }
 function joinClick() {
-    console.log("checking");
-    socket.emit("join room", {
-      roomname: jNameRoom.value,
-      roompass: jPassRoom.value,
-    });
+  console.log("checking");
+  socket.emit("join room", {
+    roomname: jNameRoom.value,
+    roompass: jPassRoom.value,
+  });
+}
+socket.on("password feedback", function (msg) {
+  console.log(msg);
+  if (msg.status == "correct") {
+    location.replace("/" + msg.type + ".html");
+  } else {
+    alert("Room atau Password salah!");
   }
-  socket.on("password feedback", function (msg){
-    console.log(msg);
-    if(msg.status=="correct"){
-        location.replace("/"+msg.type+".html");
-    }
-    else{
-        alert("Room atau Password salah!");
-    }
-  });
-  socket.on("room ada", function(name){
-    alert("room dengan nama "+ name+" Sudah ada!");
-  });
-  socket.on("sukses masuk",function(msg) {
-    location.replace("/"+msg.type+".html");
-  });
-
+});
+socket.on("room ada", function (name) {
+  alert("room dengan nama " + name + " Sudah ada!");
+});
+socket.on("sukses masuk", function (msg) {
+  location.replace("/" + msg.type + ".html");
+});

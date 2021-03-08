@@ -25,8 +25,8 @@ function createRoom(name, pass, type) {
         }
         else return false;
       }
-      return false;
     }
+    return false;
   }
   function checkRoomname(name) {
     console.log("masuk ga");

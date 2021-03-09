@@ -1,16 +1,23 @@
 (function () {
-  const socket = io("/collab");
+  const socket = io("/broadcast");
   var canvas = document.getElementsByClassName("whiteboard")[0];
   var context = canvas.getContext("2d");
   var current = {
-    color: getRandomColor(),
+    color: "black",
   };
   var drawing = false;
-
+  var status = "";
   canvas.addEventListener("mousedown", onMouseDown, false);
   canvas.addEventListener("mouseup", onMouseUp, false);
   canvas.addEventListener("mouseout", onMouseUp, false);
   canvas.addEventListener("mousemove", throttle(onMouseMove, 10), false);
+
+  socket.on("roomname", (msg) => {
+    room = msg;
+  });
+  socket.on("status", (msg) => {
+    status = msg;
+  });
   socket.on("drawing", onDrawingEvent);
 
   window.addEventListener("resize", onResize, false);
@@ -37,30 +44,37 @@
       x1: x1 / w,
       y1: y1 / h,
       color: color,
+      roomname: room,
     });
   }
 
   function onMouseDown(e) {
-    drawing = true;
-    current.x = e.clientX;
-    current.y = e.clientY;
+    if (status == "master") {
+      drawing = true;
+      current.x = e.clientX;
+      current.y = e.clientY;
+    }
   }
 
   function onMouseUp(e) {
-    if (!drawing) {
-      return;
+    if (status == "master") {
+      if (!drawing) {
+        return;
+      }
+      drawing = false;
+      drawLine(current.x, current.y, e.clientX, e.clientY, current.color, true);
     }
-    drawing = false;
-    drawLine(current.x, current.y, e.clientX, e.clientY, current.color, true);
   }
 
   function onMouseMove(e) {
-    if (!drawing) {
-      return;
+    if (status == "master") {
+      if (!drawing) {
+        return;
+      }
+      drawLine(current.x, current.y, e.clientX, e.clientY, current.color, true);
+      current.x = e.clientX;
+      current.y = e.clientY;
     }
-    drawLine(current.x, current.y, e.clientX, e.clientY, current.color, true);
-    current.x = e.clientX;
-    current.y = e.clientY;
   }
 
   // limit the number of events per second
@@ -77,6 +91,7 @@
   }
 
   function onDrawingEvent(data) {
+      console.log(status);
     var w = canvas.width;
     var h = canvas.height;
     drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color);
@@ -99,12 +114,8 @@
       "pink",
       "brown",
       "orange",
-      "cyan",
-      "maroon",
-      "coral",
-      "salmon",
     ];
-    var color = letters[Math.floor(Math.random() * 14)];
+    var color = letters[Math.floor(Math.random() * 9)];
     return color;
   }
 })();

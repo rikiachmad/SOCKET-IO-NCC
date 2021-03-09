@@ -104,8 +104,12 @@
       "pink",
       "brown",
       "orange",
+      "cyan",
+      "maroon",
+      "coral",
+      "salmon",
     ];
-    var color = letters[Math.floor(Math.random() * 9)];
+    var color = letters[Math.floor(Math.random() * 14)];
     return color;
   }
 })();

@@ -15,6 +15,7 @@ const collabNamespace = io.of("/collab");
 const chatNamespace = io.of("/chat");
 const roomNamespace = io.of("/room");
 const boardNamespace = io.of("/collabboard");
+const broadNamespace = io.of("/broadcast");
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/homepage.html");
 });
@@ -23,6 +24,7 @@ server.listen(3000, () => {
   console.log(`Server running at http://127.0.0.1:${port}/`);
 });
 let thisRoom = "";
+let status = "";
 function onConnection(socket) {
   socket.on("drawing", (data) => socket.broadcast.emit("drawing", data));
 }
@@ -34,6 +36,18 @@ boardNamespace.on("connection", function (socket){
   socket.on("drawing", (data) => {
     thisRoom = data.roomname;
     console.log("drawing room: " + thisRoom);
+    socket.to(thisRoom).emit("drawing", data);
+  });
+});
+broadNamespace.on("connection", function(socket){
+  socket.join(thisRoom);
+  console.log(status); 
+  console.log(thisRoom);
+  socket.emit("status", status);
+  socket.emit("roomname", thisRoom);
+  socket.on("drawing", (data)=>{
+    console.log(data);
+    thisRoom = data.roomname;
     socket.to(thisRoom).emit("drawing", data);
   });
 });
@@ -73,7 +87,7 @@ roomNamespace.on("connection", (socket) => {
       socket.emit("sukses masuk", { type: room.roomtype, name: room.roomname, });
       let Newuser = joinUser(socket.id, newName, room.roomname);
       thisRoom = Newuser.roomname;
-
+      status = "master";
       console.log("current croom: " + thisRoom);
     } else {
       socket.emit("room ada", room.roomname);
@@ -92,6 +106,7 @@ roomNamespace.on("connection", (socket) => {
       console.log(getRoomtype(room.roomname));
       let Newuser = joinUser(socket.id, newName, room.roomname);
       thisRoom = Newuser.roomname;
+      status = "follower";
       console.log("current jroom: " + thisRoom);
     } else {
       socket.emit("password feedback", { status: "wrong" });

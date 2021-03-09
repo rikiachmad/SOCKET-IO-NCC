@@ -14,6 +14,7 @@ const {
 const collabNamespace = io.of("/collab");
 const chatNamespace = io.of("/chat");
 const roomNamespace = io.of("/room");
+const boardNamespace = io.of("/collabboard");
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/homepage.html");
 });
@@ -21,12 +22,21 @@ app.use(express.static(__dirname + "/public"));
 server.listen(3000, () => {
   console.log(`Server running at http://127.0.0.1:${port}/`);
 });
-
+let thisRoom = "";
 function onConnection(socket) {
   socket.on("drawing", (data) => socket.broadcast.emit("drawing", data));
 }
 
 collabNamespace.on("connection", onConnection);
+boardNamespace.on("connection", function (socket){
+  socket.join(thisRoom);
+  socket.emit("roomname", thisRoom);
+  socket.on("drawing", (data) => {
+    thisRoom = data.roomname;
+    console.log("drawing room: " + thisRoom);
+    socket.to(thisRoom).emit("drawing", data);
+  });
+});
 
 chatNamespace.on("connection", function (socket) {
   console.log("connected");
@@ -50,7 +60,7 @@ chatNamespace.on("connection", (socket) => {
   });
   socket.emit("username", newName);
 });
-let thisRoom = "";
+
 roomNamespace.on("connection", (socket) => {
    socket.emit("roomname", thisRoom);
    socket.join(thisRoom);

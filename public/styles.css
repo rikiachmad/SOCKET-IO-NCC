@@ -110,7 +110,7 @@
   #menu p.welcome {
     flex: 1;
   }
-  #myCanvas {
+  .whiteboard {
     position: absolute;
     left: 0;
     right: 0;

@@ -48,9 +48,16 @@
         </div>
       </div>
     </div>
-    <div id="board">
+    <iframe
+      id="iframe"
+      src="/collab-for-iframe.html"
+      scrolling="no"
+      class="iframe-class"
+      frameborder="1"
+    ></iframe>
+    <!-- <div id="board">
       <canvas class="whiteboard" id="myCanvas"> </canvas>
-    </div>
+    </div> -->
     <div id="wrapper">
       <div id="menu">
         <p id="collabWelcome">Welcome, <b></b></p>
@@ -79,6 +86,6 @@
     </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/collabchat.js"></script>
-    <script src="/collabboard.js"></script>
+    <!-- <script src="/collabboard.js"></script> -->
   </body>
 </html>

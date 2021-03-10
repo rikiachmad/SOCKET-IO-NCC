@@ -4,6 +4,7 @@ var messages = document.getElementById("collabMessages");
 var form = document.getElementById("collabForm");
 var input = document.getElementById("collabInput");
 var chatbox = document.getElementById("collabChatbox");
+var roomtemplate = document.getElementById("roomname");
 var userName = document.getElementById("usr");
 var room = "";
 
@@ -29,7 +30,7 @@ form.addEventListener("submit", function (e) {
 sockets.on("collabchat", function (msg) {
   console.log("pesan diterima");
   var item = document.createElement("li");
-   item.textContent = msg.msg.user + " : " + msg.msg.value;
+  item.innerHTML = "<strong>"+msg.msg.user +"</strong>" + " : " + msg.msg.value;
   messages.appendChild(item);
   chatbox.scrollTo(0, document.body.scrollHeight);
 });
@@ -37,4 +38,5 @@ sockets.on("collabchat", function (msg) {
 sockets.on("roomname", (msg)=>{
   console.log(msg);
   room=msg;
+  roomtemplate.append(msg);
   });

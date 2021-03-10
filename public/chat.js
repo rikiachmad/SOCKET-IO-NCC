@@ -31,7 +31,7 @@ form.addEventListener("submit", function (e) {
 sockets.on("chat message", function (msg) {
   console.log(msg);
   var item = document.createElement("li");
-   item.textContent = msg.msg.user + " : " + msg.msg.value;
+   item.innerHTML = "<strong>"+msg.msg.user +"</strong>" + " : " + msg.msg.value;
   messages.appendChild(item);
   chatbox.scrollTo(0, document.body.scrollHeight);
 });

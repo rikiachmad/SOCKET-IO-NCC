@@ -110,19 +110,37 @@
   #menu p.welcome {
     flex: 1;
   }
-  .whiteboard {
+  #myCanvas {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
     top: 0;
   }
+
   #iframe {
     width:1350px;
     margin-left : 150px;
+    margin-top: 50px;
     height:800px;
     border: solid black;
   }
   #btn-createroom {
     margin-left: 150px  ;
+  }
+  #iframeCollab, #iframeBroadcast{
+    width:1350px;
+    margin-left : 150px;
+    margin-top : 140px;
+    height:800px;
+    border: solid black;
+  }
+  #roomname{
+    position: absolute;
+    left: 150px;
+    top : 100px;
+    font-family: monospace;
+  }
+  #background{
+    background-color: #a7a7a7;
   }

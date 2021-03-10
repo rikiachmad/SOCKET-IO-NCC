@@ -1,26 +1,22 @@
-var csockets = io("/chat");
-// var collabSockets = io("/room");
 var sockets = io("/room");
 var welcome = document.getElementById("collabWelcome");
 var messages = document.getElementById("collabMessages");
 var form = document.getElementById("collabForm");
 var input = document.getElementById("collabInput");
 var chatbox = document.getElementById("collabChatbox");
-var userName = "";
+var userName = document.getElementById("usr");
 var room = "";
 
-csockets.on("username", (name) => {
-  console.log(name);
-  welcome.append(name + "!");
-  userName = name;
-});
+function getUsername() {
+  welcome.append(userName.value + "!");
+}
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
   if (input.value) {
     console.log("masukkk");
     sockets.emit("collabchat message", {
-      user: userName,
+      user: userName.value,
       value: input.value,
       roomname: room,
     });

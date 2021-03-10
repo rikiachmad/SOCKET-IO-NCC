@@ -1,13 +1,11 @@
 let users = [];
 
-function joinUser(socketId, userName, roomName) {
+function joinUser(socketId, userName) {
   const user = {
     socketID: socketId,
     username: userName,
-    roomname: roomName,
   };
   users.push(user);
-  return user;
 }
 
 function removeUser(id) {
@@ -17,6 +15,12 @@ function removeUser(id) {
     return users.splice(index, 1)[0];
   }
 }
+function getName(id){
+  for(var i=0; i<users.length; i++){
+    if(users[i].socketID == id){
+      return users[i].username;
+    }
+  }
+}
 
-
-module.exports = { joinUser, removeUser };
+module.exports = { joinUser, removeUser, getName };

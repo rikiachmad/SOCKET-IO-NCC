@@ -3,9 +3,51 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title>Collaborative</title>
   </head>
   <body>
+    <div class="modal fade" data-backdrop="static" id="ModalUsername">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              Please Enter Your Username For This Room
+            </h4>
+          </div>
+          <div class="modal-body">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter Username"
+              id="usr"
+              value=""
+              autofocus
+              required
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              onclick="getUsername()"
+              id="usrname"
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              disabled
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="board">
       <canvas class="whiteboard" id="myCanvas"> </canvas>
     </div>
@@ -21,6 +63,20 @@
         <button id="collabButton">Send</button>
       </form>
     </div>
+    <script>
+      $(window).on("load", function () {
+        $("#ModalUsername").modal("show");
+      });
+      $(document).ready(function () {
+        $("#usr").on("input change", function () {
+          if ($(this).val() != "") {
+            $("#usrname").prop("disabled", false);
+          } else {
+            $("#usrname").prop("disabled", true);
+          }
+        });
+      });
+    </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/collabchat.js"></script>
     <script src="/collabboard.js"></script>

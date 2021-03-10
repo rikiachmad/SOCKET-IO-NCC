@@ -5,7 +5,7 @@ var button = document.getElementById("createRoom");
 var jNameRoom = document.getElementById("jroom");
 var jPassRoom = document.getElementById("jpwd");
 var socket = io("/room");
-
+//var username = document.getElementById("usr");
 function checkRadio() {
   for (var i = 0, length = radios.length; i < length; i++) {
     if (radios[i].checked) {

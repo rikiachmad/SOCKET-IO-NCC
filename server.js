@@ -3,7 +3,7 @@ const app = express();
 const server = require("http").createServer(app);
 const port = process.env.PORT || 3000;
 const io = require("socket.io")(server);
-const { joinUser, removeUser } = require("./public/users");
+const { joinUser, removeUser, getName } = require("./public/users");
 const {
   createRoom,
   checkRoom,
@@ -25,12 +25,13 @@ server.listen(3000, () => {
 });
 let thisRoom = "";
 let status = "";
+let newName = "";
 function onConnection(socket) {
   socket.on("drawing", (data) => socket.broadcast.emit("drawing", data));
 }
 
 collabNamespace.on("connection", onConnection);
-boardNamespace.on("connection", function (socket){
+boardNamespace.on("connection", function (socket) {
   socket.join(thisRoom);
   socket.emit("roomname", thisRoom);
   socket.on("drawing", (data) => {
@@ -39,13 +40,13 @@ boardNamespace.on("connection", function (socket){
     socket.to(thisRoom).emit("drawing", data);
   });
 });
-broadNamespace.on("connection", function(socket){
+broadNamespace.on("connection", function (socket) {
   socket.join(thisRoom);
-  console.log(status); 
+  console.log(status);
   console.log(thisRoom);
   socket.emit("status", status);
   socket.emit("roomname", thisRoom);
-  socket.on("drawing", (data)=>{
+  socket.on("drawing", (data) => {
     console.log(data);
     thisRoom = data.roomname;
     socket.to(thisRoom).emit("drawing", data);
@@ -59,34 +60,26 @@ chatNamespace.on("connection", function (socket) {
     chatNamespace.emit("chat message", { msg: msg, id: socket.id });
   });
 });
-let newName = "";
 chatNamespace.on("connection", (socket) => {
   socket.on("disconnect", () => {
-    const user = removeUser(socket.id);
-    if (user) {
-      console.log(user.username + " has left");
-    }
-    console.log("disconnected");
+    console.log("user disconnected");
   });
-  socket.on("send data", (name) => {
-    newName = name;
-    console.log("server:" + name);
-  });
-  socket.emit("username", newName);
 });
 
 roomNamespace.on("connection", (socket) => {
-   socket.emit("roomname", thisRoom);
-   socket.join(thisRoom);
+  socket.emit("roomname", thisRoom);
+  socket.emit("username", newName);
+  socket.join(thisRoom);
   socket.on("create room", (room) => {
     console.log(room);
     let isAvailable = checkRoomname(room.roomname);
     console.log(isAvailable);
     if (isAvailable) {
       createRoom(room.roomname, room.roompass, room.roomtype);
-      socket.emit("sukses masuk", { type: room.roomtype, name: room.roomname, });
-      let Newuser = joinUser(socket.id, newName, room.roomname);
-      thisRoom = Newuser.roomname;
+      newName = (getName(socket.id));
+      socket.emit("sukses masuk", { type: room.roomtype, name: room.roomname });
+      //let Newuser = joinUser(socket.id, newName);
+      thisRoom = room.roomname;
       status = "master";
       console.log("current croom: " + thisRoom);
     } else {
@@ -104,8 +97,8 @@ roomNamespace.on("connection", (socket) => {
         type: getRoomtype(room.roomname),
       });
       console.log(getRoomtype(room.roomname));
-      let Newuser = joinUser(socket.id, newName, room.roomname);
-      thisRoom = Newuser.roomname;
+      //let Newuser = joinUser(socket.id, newName, room.roomname);
+      thisRoom = room.roomname;
       status = "follower";
       console.log("current jroom: " + thisRoom);
     } else {

@@ -59,6 +59,7 @@ sockets.on("chat message", function (msg) {
 });
 ```
 <br>
+
 dan untuk drawing whiteboard nya menggunakan source code drawing,js dibawah ini pada client side.
 ``` drawing all user
 (function () {
@@ -232,6 +233,7 @@ broadNamespace.on("connection", function (socket) {
 });
 ```
 <br>
+
 dan pada client side menggunakan broadcastboard.js
 untuk chat nya sendiri tetap menggunakan collabchat.js
 

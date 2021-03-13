@@ -33,7 +33,7 @@ chatNamespace.on("connection", (socket) => {
 });
 ```
 <br>
-lalu untuk client side menggunakan chat.js. source code nya seperti berikut.
+lalu untuk client side menggunakan chat.js source code nya seperti berikut.
 ``` chat.js
 form.addEventListener("submit", function (e) {
   e.preventDefault();
